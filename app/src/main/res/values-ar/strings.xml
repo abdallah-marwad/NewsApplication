@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">الأخبار</string>
+    <string name="all_news">جميع الاخبار</string>
+    <string name="search">بحث</string>
+    <string name="saved">المفضله</string>
+    <string name="search_frag_search">بحث...</string>
+
+</resources>
