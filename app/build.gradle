@@ -6,12 +6,12 @@ apply plugin: "androidx.navigation.safeargs.kotlin"
 apply plugin: "kotlin-parcelize"
 
 android {
-    compileSdkVersion 33
+    compileSdkVersion 34
 
     defaultConfig {
-        applicationId "com.androiddevs.mvvmnewsapp"
+        applicationId "com.abdulrhman.mvvmnewsapp"
         minSdkVersion 24
-        targetSdkVersion 33
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
         buildFeatures {
@@ -35,6 +35,7 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+    namespace 'com.androiddevs.mvvmnewsapp'
 }
 
 dependencies {

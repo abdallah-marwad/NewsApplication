@@ -35,7 +35,7 @@ class BreakingNewsFragment : Fragment(R.layout.fragment_breaking_news) {
     private fun onItemClick() {
         newsAdapter.setOnClickListener {
 
-            if (findNavController().currentDestination?.id == R.id.breakingNewsFragment) {
+                if (findNavController().currentDestination?.id == R.id.breakingNewsFragment) {
                 findNavController().navigate(
                     BreakingNewsFragmentDirections.actionBreakingNewsFragmentToArticleFragment(it)
                 )

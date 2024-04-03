@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.AbsListView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,6 +26,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
     private lateinit var viewModel: NewsViewModel
     private lateinit var newsAdapter: NewsAdapter
     private lateinit var binding: FragmentSearchNewsBinding
+    private  var changeSearchList: MutableLiveData<Boolean> =  MutableLiveData<Boolean>(false)
     val TAG = "Searching News Fragment"
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,6 +61,7 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                 it?.let {
                     if (it.toString().isNotEmpty()) {
                         viewModel.getSearchingNews(it.toString())
+                        changeSearchList.postValue(true)
                     }
                 }
             }
@@ -124,13 +127,28 @@ class SearchNewsFragment : Fragment(R.layout.fragment_search_news) {
                 is Resource.Success -> {
                     hideProgressBar()
                     it.data?.let { newsResponse ->
-                        newsAdapter.differ.submitList(newsResponse.articles.toList())
-                        val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
-                        isLastPage = viewModel.searchingNewsPage == totalPages
-                        if(isLastPage){
-                            binding.rvSearchNews.setPadding(0,0,0,0)
+                        changeSearchList.observe(viewLifecycleOwner){
+
+                            if(it){
+                                newsAdapter.useList = true
+                                newsAdapter.list = newsResponse.articles
+                                val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
+                                isLastPage = viewModel.searchingNewsPage == totalPages
+                                if(isLastPage){
+                                    binding.rvSearchNews.setPadding(0,0,0,0)
+                                }
+                            }else{
+                            newsAdapter.differ.submitList(newsResponse.articles.toList())
+                            val totalPages = newsResponse.totalResults / Constants.QUERY_PAGE_SIZE + 2
+                            isLastPage = viewModel.searchingNewsPage == totalPages
+                            if(isLastPage){
+                                binding.rvSearchNews.setPadding(0,0,0,0)
+                            }
                         }
-                    }
+                        }
+
+                        }
+
                 }
             }
         })

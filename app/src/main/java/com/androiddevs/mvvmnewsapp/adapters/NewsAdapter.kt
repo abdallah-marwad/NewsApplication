@@ -15,6 +15,8 @@ import com.androiddevs.mvvmnewsapp.models.Article
 import com.bumptech.glide.Glide
 
 class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
+    var list: MutableList<Article>? = null
+    var useList: Boolean = false
 
     inner class ArticleViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         var binding: ItemArticlePreviewBinding
@@ -35,8 +37,7 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
                 return oldItem == newItem
             }
         }
-    val differ = AsyncListDiffer(this,differCallBack)
-
+    val differ = AsyncListDiffer(this, differCallBack)
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArticleViewHolder {
@@ -50,26 +51,40 @@ class NewsAdapter : RecyclerView.Adapter<NewsAdapter.ArticleViewHolder>() {
     }
 
     override fun getItemCount(): Int {
-        return differ.currentList.size
+        return if (!useList) {
+            differ.currentList.size
+        } else {
+            list?.size ?: 0
+        }
     }
 
     override fun onBindViewHolder(holder: ArticleViewHolder, position: Int) {
-        val article = differ.currentList[position]
+        var article: Article?
+        if (useList) {
+            article = list?.get(position)
+
+        } else {
+            article = differ.currentList[position]
+        }
         holder.binding.apply {
-            Glide.with(root).load(article.urlToImage).into(ivArticleImage)
-            tvSource.text = article.source?.name
-            title.text = article.title
-            tvDescription.text = article.description
-            tvPublishedAt.text = article.publishedAt
+            Glide.with(root).load(article?.urlToImage).into(ivArticleImage)
+            tvSource.text = article?.source?.name
+            title.text = article?.title
+            tvDescription.text = article?.description
+            tvPublishedAt.text = article?.publishedAt
         }
         holder.binding.root.setOnClickListener {
-            onItemClickListener?.let { it(article) }
+            onItemClickListener?.let {
+                if (article != null) {
+                    it(article)
+                }
+            }
         }
     }
 
     // Lambda For Listener
-    private var onItemClickListener : ((Article)->Unit)? = null
-    fun setOnClickListener(listener:( Article)->Unit){
+    private var onItemClickListener: ((Article) -> Unit)? = null
+    fun setOnClickListener(listener: (Article) -> Unit) {
         onItemClickListener = listener
     }
 
