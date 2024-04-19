@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">الأخبار</string>
+    <string name="app_name">اخر الاخبار</string>
     <string name="all_news">جميع الاخبار</string>
     <string name="search">بحث</string>
     <string name="saved">المفضله</string>

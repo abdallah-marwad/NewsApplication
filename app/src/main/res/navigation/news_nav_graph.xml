@@ -54,4 +54,8 @@
             android:name="articleParcelable"
             app:argType="com.androiddevs.mvvmnewsapp.models.Article" />
     </fragment>
+    <fragment
+        android:id="@+id/contactUsFragment"
+        android:name="com.androiddevs.mvvmnewsapp.ui.fragments.ContactUsFragment"
+        android:label="ContactUsFragment" />
 </navigation>
